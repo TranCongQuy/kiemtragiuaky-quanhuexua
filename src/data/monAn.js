@@ -1,0 +1,58 @@
+export const DS_MON = [
+  {
+    id: "m01",
+    ten: "Bún bò Huế",
+    gia: 45000,
+    moTa: "Nước dùng cay nồng, sả và mắm ruốc đặc trưng.",
+    daHet: false,
+  },
+  {
+    id: "m02",
+    ten: "Cơm hến",
+    gia: 25000,
+    moTa: "Hến xào, rau sống, bánh tráng nướng giòn.",
+    daHet: false,
+  },
+  {
+    id: "m03",
+    ten: "Bánh bèo",
+    gia: 30000,
+    moTa: "Bánh bèo chén, tôm cháy, mỡ hành thơm phức.",
+    daHet: false,
+  },
+  {
+    id: "m04",
+    ten: "Bánh khoái",
+    gia: 35000,
+    moTa: "Bánh khoái giòn, cuốn rau sống chấm nước lèo.",
+    daHet: false,
+  },
+  {
+    id: "m05",
+    ten: "Bánh bột lọc",
+    gia: 30000,
+    moTa: "Bánh lọc trong veo, nhân tôm thịt đậm đà.",
+    daHet: true,
+  },
+  {
+    id: "m06",
+    ten: "Chè bắp",
+    gia: 15000,
+    moTa: "Chè bắp ngọt thanh, nước cốt dừa béo ngậy.",
+    daHet: true,
+  },
+  {
+    id: "m07",
+    ten: "Nem lụi",
+    gia: 40000,
+    moTa: "Nem nướng than hoa, cuốn bánh tráng chấm nước lèo.",
+    daHet: false,
+  },
+  {
+    id: "m08",
+    ten: "Bún hến",
+    gia: 20000,
+    moTa: "Bún hến nguội, canh hến nóng, ăn kèm bánh tráng.",
+    daHet: false,
+  },
+];
