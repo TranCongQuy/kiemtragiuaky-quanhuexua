@@ -8,10 +8,14 @@ import { DS_MON } from "./data/monAn";
 import useLocalStorage from "./hooks/useLocalStorage";
 
 export default function App() {
-  // C3.3: Đổi useState → useLocalStorage, key "gio-hang"
   const [gio, setGio] = useLocalStorage("gio-hang", []);
-
   const [idDangChon, setIdDangChon] = useState(null);
+
+  // C4.3: Thông báo thành công
+  const [thongBao, setThongBao] = useState("");
+
+  // C4.3: Key để reset form — đổi key → React dựng lại form mới
+  const [formKey, setFormKey] = useState(0);
 
   function datMon(id) {
     setGio((truoc) => {
@@ -33,14 +37,17 @@ export default function App() {
     setGio([]);
   }
 
+  // C4.3: Xử lý gửi đơn
   function guiDon(thongTin) {
-    console.log("Gui don:", { thongTin, gio });
-    setGio([]);
+    setThongBao(`Đã nhận đơn của ${thongTin.hoTen}`);
+    setGio([]); // Làm rỗng giỏ
+    setFormKey((k) => k + 1); // Đổi key → reset form
+    setTimeout(() => setThongBao(""), 4000);
   }
 
   const tongPhan = gio.reduce((sum, dong) => sum + dong.soLuong, 0);
 
-  // C3.2: useEffect đổi document.title theo số phần
+  // C3.2: Đổi document.title
   const tenQuan = import.meta.env.VITE_TEN_QUAN || "Quán Huế Xưa";
   useEffect(() => {
     document.title = tongPhan > 0 ? `(${tongPhan}) ${tenQuan}` : tenQuan;
@@ -60,6 +67,7 @@ export default function App() {
           />
         </Khung>
 
+        {/* C4.2: Truyền nút "Xóa giỏ hàng" vào prop hanhDong */}
         <Khung
           tieuDe="Giỏ hàng"
           hanhDong={
@@ -72,7 +80,18 @@ export default function App() {
         </Khung>
 
         <Khung tieuDe="Thông tin nhận món">
-          <FormDatMon onGui={guiDon} choPhepGui={gio.length > 0} />
+          {/* C4.3: Thông báo thành công */}
+          {thongBao && (
+            <p role="status" className="thong-bao-thanh-cong">
+              {thongBao}
+            </p>
+          )}
+          {/* C4.3: key={formKey} → reset form khi key đổi */}
+          <FormDatMon
+            key={formKey}
+            onGui={guiDon}
+            choPhepGui={gio.length > 0}
+          />
         </Khung>
       </main>
     </div>
