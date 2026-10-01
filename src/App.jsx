@@ -1,39 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import DanhSachMon from "./components/DanhSachMon";
 import GioHang from "./components/GioHang";
 import Khung from "./components/Khung";
+import FormDatMon from "./components/FormDatMon";
 import { DS_MON } from "./data/monAn";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 export default function App() {
-  // C2.2: State giỏ hàng — mảng { id, soLuong }
-  const [gio, setGio] = useState([]);
+  // C3.3: Đổi useState → useLocalStorage, key "gio-hang"
+  const [gio, setGio] = useLocalStorage("gio-hang", []);
 
-  // C2.4: State thẻ đang chọn
   const [idDangChon, setIdDangChon] = useState(null);
 
-  // C2.2: Thêm món vào giỏ — chưa có thì thêm mới, có rồi thì tăng số lượng
   function datMon(id) {
     setGio((truoc) => {
       const daCo = truoc.find((dong) => dong.id === id);
       if (daCo) {
-        // Đã có → tăng số lượng, KHÔNG thêm dòng mới
         return truoc.map((dong) =>
           dong.id === id ? { ...dong, soLuong: dong.soLuong + 1 } : dong,
         );
       }
-      // Chưa có → thêm dòng mới với soLuong = 1
       return [...truoc, { id, soLuong: 1 }];
     });
   }
 
-  // C2.4: Chọn thẻ món
   function chonMon(id) {
     setIdDangChon(id);
   }
 
-  // C2.3: Derived state — tính tổng phần từ gio, KHÔNG tạo state riêng
+  function xoaGio() {
+    setGio([]);
+  }
+
+  function guiDon(thongTin) {
+    console.log("Gui don:", { thongTin, gio });
+    setGio([]);
+  }
+
   const tongPhan = gio.reduce((sum, dong) => sum + dong.soLuong, 0);
+
+  // C3.2: useEffect đổi document.title theo số phần
+  const tenQuan = import.meta.env.VITE_TEN_QUAN || "Quán Huế Xưa";
+  useEffect(() => {
+    document.title = tongPhan > 0 ? `(${tongPhan}) ${tenQuan}` : tenQuan;
+  }, [tongPhan, tenQuan]);
 
   return (
     <div className="app">
@@ -49,8 +60,19 @@ export default function App() {
           />
         </Khung>
 
-        <Khung tieuDe="Giỏ hàng">
+        <Khung
+          tieuDe="Giỏ hàng"
+          hanhDong={
+            <button type="button" onClick={xoaGio}>
+              Xóa giỏ hàng
+            </button>
+          }
+        >
           <GioHang gio={gio} dsMon={DS_MON} />
+        </Khung>
+
+        <Khung tieuDe="Thông tin nhận món">
+          <FormDatMon onGui={guiDon} choPhepGui={gio.length > 0} />
         </Khung>
       </main>
     </div>
